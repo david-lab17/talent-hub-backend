@@ -26,6 +26,8 @@ Create a `.env` file in the root directory (where `docker-compose.yml` is locate
 # .env
 DB_PASSWORD=your-secure-db-password
 SESSION_SECRET=your-production-session-secret
+CORS_ORIGINS=http://localhost:5173,http://localhost:5174,https://your-admin-portal.vercel.app,https://your-candidate-portal.vercel.app
+SECURE_COOKIES=false
 ```
 
 The `docker-compose.yml` is already configured to use these variables.
