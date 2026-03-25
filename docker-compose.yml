@@ -22,7 +22,7 @@ services:
       SESSION_SECRET: ${SESSION_SECRET:-your-super-secret-session-key-change-in-production}
       NODE_ENV: ${NODE_ENV:-production}
       LOG_LEVEL: ${LOG_LEVEL:-info}
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:5174,https://talent-hub-admin-portal-92t3f20xx.vercel.app,https://talent-hub-candidate-portal.vercel.app}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:5174,https://talent-hub-admin-portal.vercel.app,https://talent-hub-candidate-portal.vercel.app}
       SECURE_COOKIES: ${SECURE_COOKIES:-false}
     ports:
       - "3001:3001"
