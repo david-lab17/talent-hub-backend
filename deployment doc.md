@@ -42,7 +42,7 @@ This will:
 -   Start a PostgreSQL 16 container.
 -   Build the backend Docker image.
 -   Start the backend container, connected to the database.
--   Expose the backend on port `3001` and the database on port `5432`.
+-   Expose the backend on port `3001` (http://62.171.140.6:3001) and the database on port `5432`.
 
 ### 4. Database Migrations
 
