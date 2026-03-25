@@ -9,25 +9,24 @@ import { logger } from "./lib/logger.js";
 const app: Express = express();
 
 // Logging
-app.use(
-  pinoHttp({
-    logger,
-    serializers: {
-      req(req) {
-        return {
-          id: req.id,
-          method: req.method,
-          url: req.url?.split("?")[0],
-        };
-      },
-      res(res) {
-        return {
-          statusCode: res.statusCode,
-        };
-      },
+const httpLogger = (pinoHttp as any)({
+  logger,
+  serializers: {
+    req(req: any) {
+      return {
+        id: req.id,
+        method: req.method,
+        url: req.url?.split("?")[0],
+      };
     },
-  })
-);
+    res(res: any) {
+      return {
+        statusCode: res.statusCode,
+      };
+    },
+  },
+});
+app.use(httpLogger);
 
 // CORS - allow credentials for session cookies
 app.use(cors({

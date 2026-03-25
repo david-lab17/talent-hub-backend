@@ -120,7 +120,7 @@ async function executeWithPiston(
         continue; // Try next API
       }
 
-      const result: PistonExecuteResponse = await response.json();
+      const result = (await response.json()) as PistonExecuteResponse;
 
       // Check for compilation errors
       if (result.compile && result.compile.code !== 0) {
@@ -216,11 +216,11 @@ export async function getAvailableRuntimes(): Promise<string[]> {
       // Try public API
       const publicResponse = await fetch(`${PISTON_PUBLIC_API}/runtimes`);
       if (!publicResponse.ok) return [];
-      const runtimes = await publicResponse.json();
-      return runtimes.map((r: any) => r.language);
+      const runtimes = (await publicResponse.json()) as Array<{ language: string }>;
+      return runtimes.map((r) => r.language);
     }
-    const runtimes = await response.json();
-    return runtimes.map((r: any) => r.language);
+    const runtimes = (await response.json()) as Array<{ language: string }>;
+    return runtimes.map((r) => r.language);
   } catch {
     return [];
   }
