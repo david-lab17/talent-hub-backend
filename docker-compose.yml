@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-Developer33159718}
+      POSTGRES_DB: talentarc
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Developer33159718}@db:5432/talentarc
+      PORT: 3001
+      SESSION_SECRET: ${SESSION_SECRET:-your-super-secret-session-key-change-in-production}
+      NODE_ENV: production
+      LOG_LEVEL: info
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
