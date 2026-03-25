@@ -30,6 +30,9 @@ RUN npm install --omit=dev
 
 # Copy the built application from the builder stage
 COPY --from=builder /app/dist ./dist
+# Copy all source files to the final image to support drizzle-kit and seeding
+# (which depend on TypeScript source files like schema.ts and seed.ts)
+COPY . .
 
 # Expose the port the app runs on
 EXPOSE 3001
