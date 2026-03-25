@@ -29,8 +29,20 @@ const httpLogger = (pinoHttp as any)({
 app.use(httpLogger);
 
 // CORS - allow credentials for session cookies
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",")
+  : ["http://localhost:5173", "http://localhost:5174"];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || true,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 
@@ -40,15 +52,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Session management
+const isProduction = process.env.NODE_ENV === "production";
+const useSecureCookies = process.env.SECURE_COOKIES === "true"; // Only enable with HTTPS
+
 app.use(session({
   secret: process.env.SESSION_SECRET || "interview-secret-key-change-in-prod",
   resave: false,
   saveUninitialized: false,
+  proxy: true, // Trust the reverse proxy
   cookie: {
-    secure: process.env.NODE_ENV === "production",
+    secure: useSecureCookies,
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+    sameSite: useSecureCookies ? "none" : "lax",
   },
 }));
 
